@@ -3,7 +3,7 @@
 class ConsolareMS
 {
     private ?PDO $conn;
-    private string $dsn = "sqlsrv:server=consolaredb.grupozelo.com;Database=Consolare;TrustServerCertificate=yes;";
+    private string $dsn = "sqlsrv:server=consolaredb.consolare.com.br;Database=Consolare;TrustServerCertificate=yes;";
     private string $username;
     private string $password;
 
