@@ -9,7 +9,7 @@ class ConsolareMS
 
     public function __construct(){
         $this->username = 'Integracao_Rastreamento';
-        $this->password = 'a0}};r9%IQ:nAPnE';
+        $this->password = 'f3R9K1pQ7B';
     }
 
     function Connection()
