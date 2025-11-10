@@ -288,7 +288,7 @@ class ConsolareMysql
                                         :obs,
                                         :ver)
                                         ON DUPLICATE KEY  UPDATE 
-                                            hora_gravacao=DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'),
+    
                                             data_retirada=DATE_FORMAT(NOW(), '%Y-%m-%d'),
                                             nome_falecido=:nome_falecido,
                                             data_falecimento=:data_falecimento,
