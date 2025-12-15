@@ -4,16 +4,16 @@ include_once 'Address.php';
 class ConsolareMysql
 {
 
-    private string $dns = "mysql:host=35.199.115.108;dbname=consolare_homolog";
-    private string $username = 'root';
-    private string $password = 'abc123**';
-    private PDO $conn;
+    private $dns = "mysql:host=35.199.115.108;dbname=consolare_homolog";
+    private $username = 'root';
+    private $password = 'abc123**';
+    private $conn;
 
     public function __construct()
     {
     }
 
-    function connect(): void
+    function connect()
     {
         $options = array(
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -22,7 +22,7 @@ class ConsolareMysql
         $this->conn = new PDO($this->dns, $this->username, $this->password, $options);
     }
 
-    function GetNotIncluded(array $where, array $consolare_data): array
+    function GetNotIncluded($where, $consolare_data)
     {
         $query = "SELECT txt_numero_nota, versao FROM guias_recolhimento gr WHERE gr.txt_numero_nota IN(" . implode(', ',array_map(function($num) {return "'" . $num . "'";}, $where)) . ") AND gr.hora_gravacao = (SELECT MAX(gr_inner.hora_gravacao) FROM guias_recolhimento gr_inner WHERE gr_inner.txt_numero_nota = gr.txt_numero_nota)";
         $stmt = $this->conn->prepare($query);
@@ -40,7 +40,7 @@ class ConsolareMysql
         return $consolare_data;
     }
 
-    function checkAddress(Address $address, string $tipo)
+    function checkAddress($address, $tipo)
     {
         // DOES NOT SELECT/INSERT IN DB IF IT DOES NOT EXIST
         if ($address->nome === null) {
@@ -102,7 +102,7 @@ class ConsolareMysql
         return $positions;
     }
 
-    function checkUrna(?Item $urna)
+    function checkUrna($urna)
     {
         if ($urna) { // Urna exist on Guia check if exist on DB
             $query = "(SELECT id FROM urnas WHERE descricao = :nome_urna)";
@@ -146,7 +146,7 @@ class ConsolareMysql
         return $randomString;
     }
 
-    function insert_guia(Consolare $consolare): void
+    function insert_guia($consolare)
     {
         $falacimento_datetime = substr($consolare->falecido_DataFalecimento, 0, 10) . ' ' . $consolare->falecido_HoraFalecimento ?? '00:00' . ':00'; // YYYY-MM-DD HH:mm:ss
         $agencia = '%' . trim(str_replace(array("AGENCIA", "-"), "", $consolare->cabecalho_NomeFuneraria)); // ADD % TO GET LIKE, AND REMOVE UNNECESSARY VALUES FROM STR
@@ -250,6 +250,10 @@ class ConsolareMysql
                                             hora_saida_velorio,
                                             data_sepultamento_cremacao,
                                             hr_sepultamento_cremacao,
+                                            tipo_contratacao,
+                                            duracao_velorio,
+                                            data_hora_contratacao,
+                                            tarifas,
                                             obs,
                                             versao) 
                                 VALUES ( 
@@ -285,6 +289,10 @@ class ConsolareMysql
                                         :vel_time,
                                         :sep_date,
                                         :sep_time,
+                                        :tipo_contratacao,
+                                        :duracao_velorio,
+                                        :data_hora_contratacao,
+                                        :tarifas,
                                         :obs,
                                         :ver)
                                         ON DUPLICATE KEY  UPDATE 
@@ -317,6 +325,10 @@ class ConsolareMysql
                                             hora_saida_velorio=:vel_time,
                                             data_sepultamento_cremacao=:sep_date,
                                             hr_sepultamento_cremacao=:sep_time,
+                                            tipo_contratacao=:tipo_contratacao,
+                                            duracao_velorio=:duracao_velorio,
+                                            data_hora_contratacao=:data_hora_contratacao,
+                                            tarifas=:tarifas,
                                             obs=:obs,
                                             versao=:ver
                                         ");
@@ -366,6 +378,11 @@ class ConsolareMysql
         $stmt->bindParam(':sep_time', $sep_hr);
 
         // OBS AND VERSION
+        // New fields mapping
+        $stmt->bindParam(':tipo_contratacao', $consolare->dadosos_TipoDeContratacao);
+        $stmt->bindParam(':duracao_velorio', $consolare->remocao_VelorioDuracao);
+        $stmt->bindParam(':data_hora_contratacao', $consolare->dadosos_DataEmissao);
+        $stmt->bindParam(':tarifas', $consolare->itens_ValorTotal);
         $stmt->bindParam(':obs', $consolare->itens_Observacoes);
         $stmt->bindParam(':ver', $consolare->versao_1);
         $stmt->execute();

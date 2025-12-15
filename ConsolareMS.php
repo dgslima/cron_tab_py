@@ -2,10 +2,10 @@
 
 class ConsolareMS
 {
-    private ?PDO $conn;
-    private string $dsn = "sqlsrv:server=consolaredb.consolare.com.br;Database=Consolare;TrustServerCertificate=yes;";
-    private string $username;
-    private string $password;
+    private $conn;
+    private $dsn = "sqlsrv:server=consolaredb.consolare.com.br;Database=Consolare;TrustServerCertificate=yes;";
+    private $username;
+    private $password;
 
     public function __construct(){
         $this->username = 'Integracao_Rastreamento';

@@ -137,7 +137,7 @@ class Consolare
     /**
      * @var Item[]
      */
-    public array $itens_2;
+    public $itens_2;
     public $itens_3;
     public $itens_4;
     public $itens_NumOrdem;
@@ -379,7 +379,7 @@ class Consolare
      *
      * @return Item|null
      */
-    public function findItemWithUrna(): ?Item
+    public function findItemWithUrna()
     {
         foreach ($this->itens_2 as $item) {
             if (stripos($item->name, 'URNA') !== false) {
@@ -392,12 +392,12 @@ class Consolare
 
 class Item
 {
-    public string $id;
-    public string $name;
-    public ?string $size;
-    public string $quantity;
-    public string $measurement;
-    public string $value;
+    public $id;
+    public $name;
+    public $size;
+    public $quantity;
+    public $measurement;
+    public $value;
 
 
     public function __construct($id, $name, $size, $quantity, $measurement, $value)
