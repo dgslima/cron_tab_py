@@ -290,6 +290,7 @@ class ConsolareMysql
                                         :sep_date,
                                         :sep_time,
                                         :tipo_contratacao,
+                                        :tipo_contratacao_spregula,
                                         :duracao_velorio,
                                         :data_hora_contratacao,
                                         :tarifas,
@@ -326,6 +327,7 @@ class ConsolareMysql
                                             data_sepultamento_cremacao=:sep_date,
                                             hr_sepultamento_cremacao=:sep_time,
                                             tipo_contratacao=:tipo_contratacao,
+                                            tipo_contratacao_spregula=:tipo_contratacao_spregula,
                                             duracao_velorio=:duracao_velorio,
                                             data_hora_contratacao=:data_hora_contratacao,
                                             tarifas=:tarifas,
@@ -380,6 +382,7 @@ class ConsolareMysql
         // OBS AND VERSION
         // New fields mapping
         $stmt->bindParam(':tipo_contratacao', $consolare->dadosos_TipoDeContratacao);
+        $stmt->bindParam(':tipo_contratacao_spregula', $consolare->dadosos_TipoDeContratacao_SPRegula);
         $stmt->bindParam(':duracao_velorio', $consolare->remocao_VelorioDuracao);
         $stmt->bindParam(':data_hora_contratacao', $consolare->dadosos_DataEmissao);
         $stmt->bindParam(':tarifas', $consolare->itens_ValorTotal);

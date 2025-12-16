@@ -24,6 +24,7 @@ class Consolare
     public $dadosos_DataInsert;
     public $dadosos_DataUpdate;
     public $dadosos_TipoDeContratacao;
+    public $dadosos_TipoDeContratacao_SPRegula;
     public $dadosos_DataEmissao;
     public $dadosos_Agencia;
     public $dadosos_Tel;
@@ -194,6 +195,7 @@ class Consolare
         $this->dadosos_DataInsert = $json['_DADOSOS_DataInsert'];
         $this->dadosos_DataUpdate = $json['_DADOSOS_DataUpdate'];
         $this->dadosos_TipoDeContratacao = $json['_DADOSOS_TipoDeContratacao'];
+        $this->dadosos_TipoDeContratacao_SPRegula = $json['_DADOSOS_TipoDeContratacao_SPRegula'];
         $this->dadosos_DataEmissao = $json['_DADOSOS_DataEmissao'];
         $this->dadosos_Agencia = $json['_DADOSOS_Agencia'];
         $this->dadosos_Tel = $json['_DADOSOS_Tel'];
