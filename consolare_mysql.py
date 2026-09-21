@@ -1,6 +1,7 @@
 import mysql.connector
 import random
 import string
+from datetime import datetime
 from address import Address
 
 
@@ -146,14 +147,37 @@ class ConsolareMysql:
         return str(date_value)[:10]
     
     def _format_datetime_string(self, date_value, time_value):
-        """Convert date and time values to string YYYY-MM-DD HH:MM:SS format"""
+        """Convert date and time values to string DD/MM/YYYY HH:MM:SS format"""
         if date_value is None:
             return None
-        date_str = self._format_date_string(date_value)
-        time_str = time_value or '00:00'
-        if isinstance(time_str, str) and len(time_str) >= 4:
-            time_str = f"{time_str[:2]}:{time_str[2:4]}"
-        return f"{date_str} {time_str}:00"
+
+        if hasattr(date_value, 'strftime'):
+            date_str = date_value.strftime('%d/%m/%Y')
+        else:
+            date_text = str(date_value).strip()
+            parsed_date = None
+            for date_format in ('%Y-%m-%d', '%d/%m/%Y', '%Y-%m-%d %H:%M:%S'):
+                try:
+                    parsed_date = datetime.strptime(date_text, date_format)
+                    break
+                except ValueError:
+                    continue
+            date_str = parsed_date.strftime('%d/%m/%Y') if parsed_date else date_text[:10]
+
+        if time_value is None or str(time_value).strip() == '':
+            time_str = '00:00:00'
+        elif hasattr(time_value, 'strftime'):
+            time_str = time_value.strftime('%H:%M:%S')
+        else:
+            time_text = str(time_value).strip()
+            if len(time_text) == 4 and time_text.isdigit():
+                time_str = f'{time_text[:2]}:{time_text[2:]}:00'
+            elif len(time_text) == 5:
+                time_str = f'{time_text}:00'
+            else:
+                time_str = time_text[:8]
+
+        return f'{date_str} {time_str}'
 
     def insert_guia(self, consolare):
         """Insert guia into database"""
